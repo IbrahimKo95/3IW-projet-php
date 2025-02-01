@@ -1,6 +1,6 @@
 <?php
 
-class ArticleController
+class ArticleController extends BaseController
 {
   public function index($slug) {}
 }

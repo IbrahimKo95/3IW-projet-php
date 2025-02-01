@@ -3,14 +3,14 @@
 require_once __DIR__ . "/../models/User.php";
 require_once __DIR__ . "/../requests/LoginRequest.php";
 
-class LoginController
+class LoginController extends BaseController
 {
-  public static function index(): void
+  public function index(): void
   {
     require_once __DIR__ . "/../views/login/index.php";
   }
 
-  public static function post(): void
+  public function post(): void
   {
     $request = new LoginRequest();
     $user = User::findOneByEmail($request->email);

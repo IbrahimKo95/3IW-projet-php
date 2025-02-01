@@ -1,63 +1,123 @@
 <?php
 
-// TODO: utiliser prepare au lieu de query !!!
-
-class QueryBuilder
+class DB
 {
-  private string $sql;
 
-  public function __construct()
-  {
-    $this->sql = "";
-  }
+    protected static $instance = null;
+    protected $pdo;
 
-  public function select(array $columns)
-  {
-    $this->sql = $this->sql . "SELECT " . implode(", ", $columns);
+    protected $table;
+    protected $fields = '*';
+    protected $wheres = [];
 
-    return $this;
-  }
+    private function __construct()
+    {
+        try {
+            $this->pdo = new PDO('mysql:host=mariadb;dbname=database', 'user', 'password', [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            ]);
+        } catch (PDOException $e) {
+            die("Connection failed: " . $e->getMessage());
+        }
+    }
 
-  public function from(string $tableName)
-  {
-    $this->sql = $this->sql . " FROM " . $tableName;
+    private function __clone() {}
 
-    return $this;
-  }
+    public static function getInstance()
+    {
+        if (!self::$instance) {
+            self::$instance = new self();
+        }
+        return self::$instance;
+    }
 
-  public function where(string $columnName, string $columnValue)
-  {
-    $this->sql = $this->sql . " WHERE " . $columnName . " = " . $columnValue;
+    public static function table ($table)
+    {
+        $instance = self::getInstance();
+        $instance->table = $table;
+        return $instance;
+    }
 
-    return $this;
-  }
+    public function select($fields)
+    {
+        $this->fields = $fields;
+        return $this;
+    }
 
-  public function fetch()
-  {
-    $databaseConnection = new PDO(
-      "mysql:host=mariadb;dbname=database",
-      "user",
-      "password"
-    );
+    public function where($column, $operator, $value)
+    {
+        $this->wheres[] = [
+            'type' => 'AND',
+            'column' => $column,
+            'operator' => $operator,
+            'value' => $value
+        ];
+        return $this;
+    }
 
-    $query = $databaseConnection->query($this->sql);
+    public function orWhere($column, $operator, $value)
+    {
+        $this->wheres[] = [
+            'type' => 'OR',
+            'column' => $column,
+            'operator' => $operator,
+            'value' => $value
+        ];
+        return $this;
+    }
 
-    $result = $query->fetch(PDO::FETCH_ASSOC);
 
-    return $result;
-  }
+    public function get()
+    {
+        $sql = 'SELECT ' . $this->fields . ' FROM ' . $this->table;
+        if (!empty($this->wheres)) {
+            $sql .= ' WHERE ';
+            foreach ($this->wheres as $index => $where) {
+                if ($index > 0) {
+                    $sql .= $where['type'] . ' ';
+                }
+                $sql .= $where['column'] . ' ' . $where['operator'] . ' ?';
+            }
+        }
+        $stmt = $this->pdo->prepare($sql);
+        $bindedValues = array_column($this->wheres, 'value');
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
 
-  public function fetchAll() {}
+    public function insert(array $data)
+    {
+        $columns = implode(', ', array_keys($data));
+        $placeholders = implode(', ', array_fill(0, count($data), '?'));
 
-  public function execute() {}
+        $sql = "INSERT INTO $this->table ($columns) VALUES ($placeholders)";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(array_values($data));
+
+        return $this->pdo->lastInsertId();
+    }
+
+    public function delete()
+    {
+        $sql = "DELETE FROM $this->table";
+
+        if (!empty($this->wheres)) {
+            $sql .= ' WHERE ';
+            foreach ($this->wheres as $index => $where) {
+                if ($index > 0) {
+                    $sql .= $where['type'] . ' ';
+                }
+                $sql .= $where['column'] . ' ' . $where['operator'] . ' ?';
+            }
+        }
+
+        $stmt = $this->pdo->prepare($sql);
+        $bindedValues = array_column($this->wheres, 'value');
+        $stmt->execute($bindedValues);
+
+        return $stmt->rowCount();
+    }
+
+
 }
-
-$queryBuilder = new QueryBuilder();
-
-$email = "anairi@esgi.fr";
-
-$queryBuilder
-  ->select(["id", "password", "email"])
-  ->from("users")
-  ->where("email", $email)
-  ->fetch();
