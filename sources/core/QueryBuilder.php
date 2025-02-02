@@ -82,6 +82,9 @@ class DB
         }
         $stmt = $this->pdo->prepare($sql);
         $bindedValues = array_column($this->wheres, 'value');
+        foreach ($bindedValues as $index => $value) {
+            $stmt->bindValue($index + 1, $value);
+        }
         $stmt->execute();
         return $stmt->fetchAll();
     }
