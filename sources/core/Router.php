@@ -9,23 +9,25 @@ class Router
         $this->routes = [];
     }
 
-    public function get(string $path, string $controllerName, string $methodName): void
+    public function get(string $path, string $controllerName, string $methodName, array $middlewares = []): void
     {
         $this->routes[] = [
             "method" => "GET",
             "path" => $path,
             "controllerName" => $controllerName,
-            "methodName" => $methodName
+            "methodName" => $methodName,
+            "middlewares" => $middlewares
         ];
     }
 
-    public function post(string $path, string $controllerName, string $methodName): void
+    public function post(string $path, string $controllerName, string $methodName, array $middlewares = []): void
     {
         $this->routes[] = [
             "method" => "POST",
             "path" => $path,
             "controllerName" => $controllerName,
-            "methodName" => $methodName
+            "methodName" => $methodName,
+            "middlewares" => $middlewares
         ];
     }
 
@@ -42,6 +44,18 @@ class Router
                 $methodName = $route["methodName"];
                 $controllerName = $route["controllerName"];
                 $controller = new $controllerName();
+                foreach ($route["middlewares"] as $middleware) {
+                    $middlewareClass = "middlewares\\" . ucfirst($middleware) . "Middleware";
+                    $middlewareFile = __DIR__ . "/../middlewares/" . ucfirst($middleware) . "Middleware.php";
+                    require_once $middlewareFile;
+                    if (class_exists($middlewareClass)) {
+                        $middlewareClass::handle();
+                    } else {
+                        throw new Exception("Middleware $middlewareClass non trouvé.");
+                    }
+                }
+
+
                 $params = [];
                 foreach ($matches as $key => $value) {
                     if (!is_int($key)) {
