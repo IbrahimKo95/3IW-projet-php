@@ -9,7 +9,7 @@ class LoginController extends BaseController
 {
     public function index(): void
     {
-      require_once __DIR__ . "/../views/login/index.php";
+        $this->view("login/index");
     }
 
     public function post(): void
@@ -26,10 +26,15 @@ class LoginController extends BaseController
             die();
         }
 
-        session_start();
         $_SESSION['user_id'] = $user->id;
 
         $this->redirect("/");
 
+    }
+
+    public function logout(): void
+    {
+        session_destroy();
+        $this->redirect("/login");
     }
 }

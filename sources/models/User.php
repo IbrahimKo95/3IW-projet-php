@@ -26,7 +26,7 @@ class User
 
     public static function currentUser(): ?User
     {
-        session_start();
+        if(!isset($_SESSION)){session_start();}
 
         if (isset($_SESSION['user_id'])) {
             return self::findById($_SESSION['user_id']);

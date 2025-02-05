@@ -98,6 +98,8 @@ class DB
         $stmt->execute();
         $this->wheres = [];
         $this->joins = [];
+        $this->table = null;
+        $this->fields = '*';
         return $stmt->fetchAll();
     }
 
