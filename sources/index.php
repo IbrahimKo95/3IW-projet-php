@@ -18,6 +18,7 @@ $router->get("/logout", LoginController::class, "logout");
 $router->post("/login", LoginController::class, "post");
 
 $router->get("/register", RegisterController::class, "index");
+$router->post("/register", RegisterController::class, "post");
 
 $router->get("/group", GroupController::class, "index", ["Auth"]);
 $router->get("/group/{id}", GroupController::class, "get");

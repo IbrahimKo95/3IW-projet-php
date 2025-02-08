@@ -72,4 +72,10 @@ class User
             ->get();
         return $res[0]['permission'];
     }
+    public function register ($data) {
+        $queryBuilder = new DB();
+    
+        $queryBuilder->table('users');
+        $queryBuilder->insert($data);
+    }
 }
