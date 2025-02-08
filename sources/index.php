@@ -23,5 +23,6 @@ $router->post("/register", RegisterController::class, "post");
 $router->get("/group", GroupController::class, "index", ["Auth"]);
 $router->get("/group/{id}", GroupController::class, "get");
 $router->post("/group/create", GroupController::class, "store");
+$router->post("/group/{id}/addUser", GroupController::class, "addUser");
 
 $router->start();

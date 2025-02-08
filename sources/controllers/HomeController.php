@@ -6,7 +6,6 @@ class HomeController extends BaseController
 {
     public function index(): void
     {
-        $groups = Group::getAll();
-        $this->view("index", ["groups" => $groups]);
+        $this->view("index", ["groups" => User::currentUser()->groups()]);
     }
 }
