@@ -10,6 +10,8 @@ class DB
     protected $fields = '*';
     protected $wheres = [];
 
+    protected $joins = [];
+
     private function __construct()
     {
         try {
@@ -71,20 +73,36 @@ class DB
     public function get()
     {
         $sql = 'SELECT ' . $this->fields . ' FROM ' . $this->table;
-        if (!empty($this->wheres)) {
-            $sql .= ' WHERE ';
-            foreach ($this->wheres as $index => $where) {
-                if ($index > 0) {
-                    $sql .= $where['type'] . ' ';
-                }
-                $sql .= $where['column'] . ' ' . $where['operator'] . ' ?';
+
+        if (!empty($this->joins)) {
+            foreach ($this->joins as $join) {
+                $sql .= ' INNER JOIN ' . $join['table'] . ' ON ' . $join['firstColumn'] . ' ' . $join['operator'] . ' ' . $join['secondColumn'];
             }
         }
+
+        if (!empty($this->wheres)) {
+            $sql .= ' WHERE ';
+            $conditions = [];
+            foreach ($this->wheres as $index => $where) {
+                $conditions[] = "{$where['column']} {$where['operator']} ?";
+            }
+            $sql .= implode(' ', array_map(fn($w, $i) => ($i > 0 ? $this->wheres[$i]['type'] . ' ' : '') . $w, $conditions, array_keys($conditions)));
+        }
+
+
         $stmt = $this->pdo->prepare($sql);
         $bindedValues = array_column($this->wheres, 'value');
+        foreach ($bindedValues as $index => $value) {
+            $stmt->bindValue($index + 1, $value);
+        }
         $stmt->execute();
+        $this->wheres = [];
+        $this->joins = [];
+        $this->table = null;
+        $this->fields = '*';
         return $stmt->fetchAll();
     }
+
 
     public function insert(array $data)
     {
@@ -92,6 +110,7 @@ class DB
         $placeholders = implode(', ', array_fill(0, count($data), '?'));
 
         $sql = "INSERT INTO $this->table ($columns) VALUES ($placeholders)";
+
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute(array_values($data));
 
@@ -117,6 +136,17 @@ class DB
         $stmt->execute($bindedValues);
 
         return $stmt->rowCount();
+    }
+
+    public function join($table, $firstColumn, $operator, $secondColumn)
+    {
+        $this->joins[] = [
+            'table' => $table,
+            'firstColumn' => $firstColumn,
+            'operator' => $operator,
+            'secondColumn' => $secondColumn
+        ];
+        return $this;
     }
 
 

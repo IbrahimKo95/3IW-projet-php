@@ -2,42 +2,53 @@
 
 class User
 {
-  private function __construct(
-    public int $id,
-    public string $firstname,
-    public string $lastname,
-    public string $email,
-    public string $password
-  ) {}
+    private function __construct(
+        public int $id,
+        public string $firstname,
+        public string $lastname,
+        public string $email,
+        public string $password
+    ) {}
 
-  public static function findOneByEmail(string $email): User|null
-  {
-    $databaseConnection = new PDO(
-      "mysql:host=mariadb;dbname=database",
-      "user",
-      "password"
-    );
+    public static function findOneByEmail(string $email): User|null
+    {
+        $res = DB::table("users")
+            ->where("email", "=", $email)
+            ->get();
+        if (count($res) === 0) {
+            return null;
+        }
+        return new User($res[0]['id'], $res[0]['email'], $res[0]['password']);
+    }
 
-    $getUserQuery = $databaseConnection->prepare("SELECT id, email, password FROM users WHERE email = :email");
+    public function isValidPassword(string $password): bool
+    {
+        return password_verify($password, $this->password);
+    }
 
-    $getUserQuery->execute([
-      "email" => $email
-    ]);
+    public static function currentUser(): ?User
+    {
+        if(!isset($_SESSION)){session_start();}
 
-    $user = $getUserQuery->fetch(PDO::FETCH_ASSOC);
-
-    return new User($user["id"], $user["email"], $user["password"]);
-  }
-
-  public function register ($data) {
-    $queryBuilder = new DB();
-
-    $queryBuilder->table('users');
-    $queryBuilder->insert($data);
-  }
-
-  public function isValidPassword(string $password): bool
-  {
-    return password_verify($password, $this->password);
-  }
+        if (isset($_SESSION['user_id'])) {
+            return self::findById($_SESSION['user_id']);
+        }
+        return null;
+    }
+    public static function findById(int $id): User|null
+    {
+        $res = DB::table("users")
+            ->where("id", "=", $id)
+            ->get();
+        if (count($res) === 0) {
+            return null;
+        }
+        return new User($res[0]['id'], $res[0]['email'], $res[0]['password']);
+    }
+    public function register ($data) {
+        $queryBuilder = new DB();
+    
+        $queryBuilder->table('users');
+        $queryBuilder->insert($data);
+    }
 }
