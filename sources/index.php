@@ -15,5 +15,6 @@ $router->post("/login", LoginController::class, "post");
 $router->get("/articles/{slug}", ArticleController::class, "index");
 
 $router->get("/register", RegisterController::class, "index");
+$router->post("/register", RegisterController::class, "post");
 
 $router->start();

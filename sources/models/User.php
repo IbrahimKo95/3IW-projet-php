@@ -4,6 +4,8 @@ class User
 {
   private function __construct(
     public int $id,
+    public string $firstname,
+    public string $lastname,
     public string $email,
     public string $password
   ) {}
@@ -25,6 +27,13 @@ class User
     $user = $getUserQuery->fetch(PDO::FETCH_ASSOC);
 
     return new User($user["id"], $user["email"], $user["password"]);
+  }
+
+  public function register ($data) {
+    $queryBuilder = new DB();
+
+    $queryBuilder->table('users');
+    $queryBuilder->insert($data);
   }
 
   public function isValidPassword(string $password): bool
