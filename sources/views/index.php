@@ -16,7 +16,7 @@
 </form>
 <ul>
     <?php foreach ($groups as $group) : ?>
-        <li><?= $group->name ?></li>
+        <li><a href="/group/<?=$group->id?>"><?= $group->name ?></a></li>
     <?php endforeach; ?>
 </ul>
 </body>

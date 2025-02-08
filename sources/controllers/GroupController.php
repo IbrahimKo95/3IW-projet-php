@@ -16,4 +16,15 @@ class GroupController extends BaseController
     {
         $this->view("group/index", ["group" => Group::findById($id)]);
     }
+
+    public function addUser($id): void
+    {
+        try {
+            $group = Group::findById($id);
+            $group->addUser($_POST['email']);
+        } catch (Exception $e) {
+            $this->withMessage($e->getMessage())->back();
+        }
+        $this->withMessage("Utilisateur ajouté avec succès.")->back();
+    }
 }

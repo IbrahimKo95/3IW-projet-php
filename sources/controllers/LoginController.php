@@ -17,13 +17,11 @@ class LoginController extends BaseController
         $request = new LoginRequest();
         $user = User::findOneByEmail($request->email);
         if (!$user) {
-            echo "L'adresse email ou le mot de passe sont incorrects.";
-            die();
+            $this->withMessage("L'adresse email ou le mot de passe sont incorrects.")->back();
         }
 
         if (!$user->isValidPassword($request->password)) {
-            echo "L'adresse email ou le mot de passe sont incorrects.";
-            die();
+            $this->withMessage("L'adresse email ou le mot de passe sont incorrects.")->back();
         }
 
         $_SESSION['user_id'] = $user->id;

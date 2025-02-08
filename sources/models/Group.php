@@ -60,4 +60,24 @@ class Group
             ->get();
         return new Group($res[0]['id'], $res[0]['name']);
     }
+
+    public function addUser($email): void
+    {
+        $user = User::findOneByEmail($email);
+        if ($user === null) {
+            throw new Exception("Utilisateur introuvable");
+        }
+        $res = DB::table('users_groups')->select('users_groups.*')
+            ->where('user_id', '=', $user->id)
+            ->where('groups_id', '=', $this->id)
+            ->get();
+        if (count($res) > 0) {
+            throw new Exception("L'utilisateur est déjà dans le groupe");
+        }
+        DB::table('users_groups')->insert([
+            'user_id' => $user->id,
+            'groups_id' => $this->id,
+            'permission' => 1
+        ]);
+    }
 }
