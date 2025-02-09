@@ -1,0 +1,19 @@
+@use "../partials/variables" as v;
+@use "../partials/mixins" as m;
+
+@layer components {
+  .title-bar {
+    @include m.flexbox($direction: row, $justify: space-between, $align: center);
+    h1 {
+      font-size: 2rem;
+      line-height: 2.5rem;
+      font-weight: 700;
+      color: var(--black);
+      margin: 0;
+    }
+    &__buttons {
+      @include m.flexbox($direction: row, $gap: 1rem);
+    }
+
+  }
+}

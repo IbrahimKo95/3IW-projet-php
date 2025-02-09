@@ -7,9 +7,10 @@
     <title>Test layout</title>
     <link rel="stylesheet" href="./../dist/framework-esgi.css" />
     <script src="./../dist/framework-esgi.js"></script>
+    <script src="https://kit.fontawesome.com/b49e7cf498.js" crossorigin="anonymous"></script>
 </head>
 
-<body>
+<body class="mb-8">
 <?php
 
 ?>

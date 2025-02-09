@@ -13,15 +13,17 @@
 		font-weight: 600;
 		border-radius: f.rem(6);
 		transition: all 0.3s;
-
+		i {
+			margin-right: f.rem(8);
+		}
 		&:hover {
 			background-color: var(--black-hover);
 		}
 		// classes modificatrices de couleur
 		&--primary {
-			background-color: var(--blue-500);
+			background-color: var(--primary-700);
 			&:hover {
-				background-color: var(--blue-400);
+				background-color: var(--primary-600);
 			}
 		}
 		&--secondary {
@@ -34,6 +36,16 @@
 			background-color: var(--red-500);
 			&:hover {
 				background-color: var(--red-400);
+			}
+		}
+		&--outline {
+			background-color: transparent;
+			color: var(--neutral-700);
+			border: 1px solid var(--neutral-700);
+			&:hover {
+				background-color: var(--primary-700);
+				border-color: var(--primary-700);
+				color: var(--white);
 			}
 		}
 		// classes modificatrices de taille

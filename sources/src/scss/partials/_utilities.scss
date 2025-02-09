@@ -10,7 +10,7 @@
 	);
 
 	// spacing
-	@for $i from 1 through 8 {
+	@for $i from 1 through 20 {
 		.h-#{$i} {
 			height: $i * $increment;
 		}
