@@ -15,6 +15,7 @@ class BaseController
         extract($data);
         $flashMessage = $_SESSION['flash_message'] ?? null;
         unset($_SESSION['flash_message']);
+        require_once __DIR__ . "/../views/layout.php";
         require_once __DIR__ . "/../views/$view.php";
     }
 
