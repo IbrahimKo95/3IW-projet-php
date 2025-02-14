@@ -17,6 +17,8 @@ class BaseController
         unset($_SESSION['flash_message']);
         $old = $_SESSION['old'] ?? null;
         unset($_SESSION['old']);
+        
+        require_once __DIR__ . "/../views/layout.php";
         require_once __DIR__ . "/../views/$view.php";
     }
 
