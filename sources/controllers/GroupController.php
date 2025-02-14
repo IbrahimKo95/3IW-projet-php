@@ -14,7 +14,8 @@ class GroupController extends BaseController
 
     public function get($id): void
     {
-        $this->view("group/index", ["group" => Group::findById($id)]);
+        $group = Group::findById($id);
+        $this->view("group/index", ["group" => $group, "photos" => $group->photos()]);
     }
 
     public function addUser($id): void

@@ -3,7 +3,7 @@
 var_dump($_ENV);
 
 $databaseConnection = new PDO(
-"mysql:host=mariadb;dbname=database",
+"mysql:host=mariadb;dbname=database;charset=utf8mb4",
 "user",
 "password"
 );
@@ -33,8 +33,10 @@ CREATE TABLE `posted_photos`(
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `user_id` BIGINT NOT NULL,
     `group_id` BIGINT NOT NULL,
-    `photos` BLOB NOT NULL,
-    `label` VARCHAR(255) NULL
+    `photos` LONGBLOB NOT NULL,
+    `label` VARCHAR(255) NULL,
+    `visibility` VARCHAR(255) NOT NULL DEFAULT 'group',
+    `token` VARCHAR(64) DEFAULT NULL
 );
 ALTER TABLE
     `posted_photos` ADD INDEX `posted_photos_user_id_index`(`user_id`);

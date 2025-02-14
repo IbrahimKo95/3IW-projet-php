@@ -53,6 +53,24 @@ class Group
         return $users;
     }
 
+    public function photos(): array
+    {
+        $user = User::currentUser();
+        $res = DB::table('posted_photos')
+            ->join('users_groups', 'users_groups.groups_id', '=', 'posted_photos.group_id')
+            ->where('posted_photos.group_id', '=', $this->id)
+            ->where('users_groups.groups_id', '=', $this->id)
+            ->where('users_groups.user_id', '=', $user->id)
+            ->where('users_groups.permission', '>', '0')
+            ->select('posted_photos.*')
+            ->get();
+        $photos = [];
+        foreach ($res as $photo) {
+            $photos[] = Photo::findById($photo['id']);
+        }
+        return $photos;
+    }
+
     public static function findById($id): Group
     {
         $res = DB::table('groups')

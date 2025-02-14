@@ -7,6 +7,7 @@ require_once __DIR__ . "/controllers/LoginController.php";
 require_once __DIR__ . "/controllers/RegisterController.php";
 require_once __DIR__ . "/controllers/GroupController.php";
 require_once __DIR__ . "/controllers/HomeController.php";
+require_once __DIR__ . "/controllers/PhotoController.php";
 
 $router = new Router();
 session_start();
@@ -24,5 +25,18 @@ $router->get("/group", GroupController::class, "index", ["Auth"]);
 $router->get("/group/{id}", GroupController::class, "get");
 $router->post("/group/create", GroupController::class, "store");
 $router->post("/group/{id}/addUser", GroupController::class, "addUser");
+
+// $router->get("/photo", PhotoController::class, "index", ["Auth"]);
+$router->get("/group/{id}/addPhotoForm", PhotoController::class, "index", ["Auth"]);
+$router->post("/group/{id}/addPhoto", PhotoController::class, "addPhoto");
+$router->post("/group/{id}/deletePhoto", PhotoController::class, "deletePhoto");
+$router->post("/group/{id}/changeVisibility", PhotoController::class, "changeVisibility");
+
+$router->get("/photo/{token}", PhotoController::class, "get");
+
+
+// $router->get("/photo/{id}", GroupController::class, "get");
+// $router->post("/group/create", GroupController::class, "store");
+// $router->post("/group/{id}/addUser", GroupController::class, "addUser");
 
 $router->start();

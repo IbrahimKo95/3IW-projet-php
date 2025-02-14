@@ -25,6 +25,11 @@ class User
         return new User($res[0]['id'], $res[0]['firstname'], $res[0]['lastname'], $res[0]['email'], $res[0]['password']);
     }
 
+    public function isMyPhoto($id)
+    {
+        return in_array($id, array_column($this->photos(), 'id'));
+    }
+
     public function isValidPassword(string $password): bool
     {
         return password_verify($password, $this->password);
@@ -64,6 +69,19 @@ class User
         return $groups;
     }
 
+    public function photos(): array
+    {
+        $res = DB::table('posted_photos')
+            ->where('posted_photos.user_id', '=', $this->id)
+            ->select('posted_photos.*')
+            ->get();
+        $photos = [];
+        foreach ($res as $photo) {
+            $photos[] = Photo::findById($photo['id']);
+        }
+        return $photos;
+    }
+
     public function getPermission(int $groupId): int
     {
         $res = DB::table('users_groups')
@@ -71,11 +89,5 @@ class User
             ->where('groups_id', '=', $groupId)
             ->get();
         return $res[0]['permission'];
-    }
-    public function register ($data) {
-        $queryBuilder = new DB();
-    
-        $queryBuilder->table('users');
-        $queryBuilder->insert($data);
     }
 }

@@ -117,6 +117,37 @@ class DB
         return $this->pdo->lastInsertId();
     }
 
+    public function update(array $data, $id)
+{
+    $setClause = implode(', ', array_map(fn($col) => "$col = ?", array_keys($data)));
+
+    $sql = "UPDATE $this->table SET $setClause WHERE id = ?";
+
+    $stmt = $this->pdo->prepare($sql);
+
+    $stmt->execute(array_merge(array_values($data), [$id]));
+
+    return $stmt->rowCount();
+}
+
+    public function insertPerso(array $data, $spe = null)
+    {
+        $columns = implode(', ', array_keys($data));
+        $placeholders = implode(', ', array_map(fn($col) => ":$col", array_keys($data)));
+
+        $sql = "INSERT INTO $this->table ($columns) VALUES ($placeholders)";
+        $stmt = $this->pdo->prepare($sql);
+        foreach ($data as $key => $item) {
+            $name = ":" . $key;
+            $thirdParam = isset($spe[$name]) ? $spe[$name] : PDO::PARAM_STR;
+
+            $stmt->bindParam($name, $data[$key], $thirdParam);
+        }
+        $stmt->execute();
+
+        return $this->pdo->lastInsertId();
+    }
+
     public function delete()
     {
         $sql = "DELETE FROM $this->table";

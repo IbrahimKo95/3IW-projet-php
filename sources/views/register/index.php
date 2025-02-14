@@ -8,9 +8,12 @@
 
 <body>
   <form method="POST" action="/register">
-    <input type="text" name="firstname">
-    <input type="text" name="lastname">
-    <input type="email" name="email">
+    <?php if (isset($flashMessage)) : ?>
+      <p><?= $flashMessage ?></p>
+    <?php endif; ?>
+    <input type="text" name="firstname" value="<?= htmlspecialchars($old['firstname'] ?? '') ?>">
+    <input type="text" name="lastname" value="<?= htmlspecialchars($old['lastname'] ?? '') ?>">
+    <input type="email" name="email" value="<?= htmlspecialchars($old['email'] ?? '') ?>">
     <input type="password" name="password">
     <input type="password" name="passwordConfirm">
     <button>

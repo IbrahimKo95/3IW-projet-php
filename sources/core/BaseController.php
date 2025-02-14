@@ -15,11 +15,16 @@ class BaseController
         extract($data);
         $flashMessage = $_SESSION['flash_message'] ?? null;
         unset($_SESSION['flash_message']);
+        $old = $_SESSION['old'] ?? null;
+        unset($_SESSION['old']);
         require_once __DIR__ . "/../views/$view.php";
     }
 
-    public function back()
+    public function back($old = null)
     {
+        if (isset($old)) {
+            $_SESSION['old'] = $old;
+        }
         $previousUrl = $_SERVER['HTTP_REFERER'] ?? '/';
         header("Location: $previousUrl");
         exit;

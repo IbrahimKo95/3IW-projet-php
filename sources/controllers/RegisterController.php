@@ -1,37 +1,49 @@
 <?php
 
+require_once __DIR__ . "/../models/User.php";
+require_once __DIR__ . "/../requests/RegisterRequest.php";
+require_once __DIR__ . "/../core/BaseController.php";
+require_once __DIR__ . "/../core/QueryBuilder.php";
+
 class RegisterController extends BaseController
 {
   public function index(): void
   {
-    require_once __DIR__ . "/../views/register/index.php";
+    $this->view("register/index");
   }
 
   public function post(): void
   {
-    $request = new LoginRequest();
+    $request = new RegisterRequest();
+
+    $properties = get_object_vars($request);
+    $allSet = !in_array("", $properties, true);
+
+    if (!$allSet) {
+      $this->withMessage("Remplissez tout les champs !")->back((array) $request);
+    }
 
     $user = User::findOneByEmail($request->email);
 
     if(isset($user)){
-      echo "L'adresse email est déjà utilisée";
-      die();
+      $this->withMessage("L'adresse email est déjà utilisée")->back((array) $request);
     }
 
     $verif = $this->verifierMotDePasse($request->password);
     if (is_string($verif)) {
-      echo $verif;
-      die();
+      $this->withMessage($verif)->back((array) $request);
     }
 
-    if ($request->password != $request->passwordConf) {
-      echo "Les mots de passes ne correspondent pas";
-      die();
+    if ($request->password != $request->passwordConfirm) {
+      $this->withMessage("Les mots de passes ne correspondent pas")->back((array) $request);
     }
+    $data = (array) $request;
+    unset($data['passwordConfirm']);
+    $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
 
-    $user = new User(2, $request->firstname, $request->lastname, $request->email, password_hash($request->password, PASSWORD_DEFAULT));
-    var_dump($user);
-    echo "Envoyer une session";
+    DB::table('users')->insert($data);
+
+    $this->redirect("/login");
   }
 
   public function verifierMotDePasse($password) {
@@ -51,5 +63,5 @@ class RegisterController extends BaseController
         return "Le mot de passe doit contenir au moins un caractère spécial.";
     }
     return true;
-}
+  }
 }
