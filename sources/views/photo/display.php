@@ -7,12 +7,12 @@
 </head>
 
 <body>
-    <section>
+    <div class="container mt-15">
         <?php if (isset($photo->photo)):
             $imageData = base64_encode($photo->photo ?? ''); ?>
-            <img src="<?= htmlspecialchars("data:image/jpeg;base64,{$imageData}"); ?>" alt="<?= htmlspecialchars($photo->label); ?>" width="700">
+            <img src="<?= htmlspecialchars("data:image/jpeg;base64,{$imageData}"); ?>" alt="<?= htmlspecialchars($photo->label); ?>" width="1000">
         <?php endif ?>
-    </section>
+    </div>
 </body>
 
 </html>

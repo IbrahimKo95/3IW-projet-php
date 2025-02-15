@@ -7,14 +7,14 @@
 </head>
 
 <body>
-    <form method="POST" action="/group/<?= $group->id ?>/addPhoto" enctype="multipart/form-data">
+    <form class="modal__body__form" method="POST" action="/group/<?= $group->id ?>/addPhoto" enctype="multipart/form-data">
         <?php if (isset($flashMessage)) : ?>
             <p><?= $flashMessage ?></p>
         <?php endif; ?>
 
-        <input type="file" name="file" id="file">
-        <input type="text" name="label">
-        <button>
+        <input placeholder="Image" type="file" name="file" id="file">
+        <input placeholder="Label" type="text" name="label">
+        <button class="button button--outline">
             Upload
         </button>
     </form>

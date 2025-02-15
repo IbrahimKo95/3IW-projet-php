@@ -57,5 +57,11 @@
 			font-size: f.rem(14);
 			line-height: f.rem(16);
 		}
+		&--wb {
+			background: none;
+			border: none;
+			color: var(--red-400);
+			line-height: 2;
+		}
 	}
 }

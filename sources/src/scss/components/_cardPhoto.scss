@@ -1,0 +1,86 @@
+@use "../partials/variables" as v;
+@use "../partials/mixins" as m;
+@use "../partials/functions" as f;
+
+@layer components {
+  .card-photo {
+    position: relative;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: f.rem(400);
+      border-radius: f.rem(6);
+      object-fit: cover;
+      transition: 0.3s ease-in-out;
+    }
+
+    &__banner {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      text-align: center;
+      padding: f.rem(12);
+      opacity: 0;
+      transform: translateY(100%);
+      transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: f.rem(8);
+    }
+
+    &__label {
+      font-weight: bold;
+    }
+
+    &__visibility {
+      flex-direction: column;
+    }
+
+    &__actions {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      gap: f.rem(10);
+
+      i {
+        font-size: f.rem(18);
+        cursor: pointer;
+        transition: color 0.3s;
+
+        &:hover {
+          color: var(--primary); // Utilise la couleur principale définie dans tes variables
+        }
+      }
+    }
+
+    &:hover {
+      img {
+        filter: brightness(0.7);
+      }
+
+      .card-photo__banner {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    &__container {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(1, 1fr);
+
+      @media (width >= f.screen(md)) {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      @media (width >= f.screen(lg)) {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+  }
+}

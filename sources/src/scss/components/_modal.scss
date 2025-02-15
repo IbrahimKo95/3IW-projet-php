@@ -1,0 +1,91 @@
+@use "../partials/variables" as v;
+@use "../partials/mixins" as m;
+@use "../partials/functions" as f;
+
+@layer components {
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(4px);
+        transition: opacity 0.3s ease-in-out;
+
+        &--visible {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 1;
+        }
+
+        &__content {
+            background-color: var(--white);
+            border-radius: f.rem(12);
+            padding: f.rem(24);
+            width: 90%;
+            max-width: f.rem(450);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            position: relative;
+            animation: modalFadeIn 0.3s ease-out;
+            display: flex;
+            flex-direction: column;
+        }
+
+        &__close-btn {
+            position: absolute;
+            top: f.rem(12);
+            right: f.rem(12);
+            background: none;
+            border: none;
+            font-size: f.rem(20);
+            color: var(--neutral-700);
+            cursor: pointer;
+            transition: color 0.2s ease;
+
+            &:hover {
+                color: var(--primary-700);
+            }
+        }
+
+        &__title {
+            font-size: f.rem(20);
+            font-weight: 600;
+            color: var(--neutral-900);
+            margin-bottom: f.rem(16);
+        }
+
+        &__body {
+            display: flex;
+            flex-direction: column;
+            gap: f.rem(12);
+            &__form {
+                display: flex;
+                flex-direction: column;
+                gap: 2rem;
+            }
+        }
+
+        &__footer {
+            margin-top: f.rem(16);
+            display: flex;
+            justify-content: flex-end;
+            gap: f.rem(8);
+        }
+    }
+
+    @keyframes modalFadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+}
