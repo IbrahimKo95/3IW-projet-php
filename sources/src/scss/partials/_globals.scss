@@ -5,11 +5,6 @@
 @layer base {
 	:root {
 		@each $name, $value in v.$colors {
-			// --#{$name}: #{$value};
-			// @if ($name != "text-color" and $name != "shadow-color") {
-			// 	--#{$name}-hover: #{color.scale($value, $lightness: 10%)};
-			// 	--#{$name}-transparent: #{color.scale($value, $alpha: -40%)};
-			// }
 			@each $name, $color in v.$colors {
 				@if ($name == "black" or $name == "white") {
 					--#{$name}: #{color.scale($color, $space: hsl)};
@@ -31,12 +26,16 @@
 				}
 			}
 		}
+		--bg-color: #f7f9f9;
+		--nav-bg-color: var(--white);
+		--default-text-color: var(--black);
+		--secondary-text-color: var(--neutral-700);
 	}
 
 	body {
 		font-family: fonts.$font1;
-		background-color: #f7f9f9;
-		color: var(--black);
+		background-color: var(--bg-color);
+		color: var(--default-text-color);
 	}
 
 	input {
@@ -44,5 +43,12 @@
 		padding: f.rem(10) f.rem(16);
 		border: solid thin currentColor;
 		//background-color: var(--input-bg-color);
+	}
+
+	.dark {
+		--bg-color: #1a1f2c;
+		--nav-bg-color: #242937;
+		--default-text-color: var(--white);
+		--secondary-text-color: var(--neutral-200);
 	}
 }
