@@ -117,18 +117,23 @@ class DB
         return $this->pdo->lastInsertId();
     }
 
-    public function update(array $data, $id)
-{
-    $setClause = implode(', ', array_map(fn($col) => "$col = ?", array_keys($data)));
+    public function update(array $data)
+    {
+        $setClause = implode(', ', array_map(fn($col) => "$col = ?", array_keys($data)));
 
-    $sql = "UPDATE $this->table SET $setClause WHERE id = ?";
+        $sql = "UPDATE $this->table SET $setClause WHERE ";
+        $conditions = [];
+        foreach ($this->wheres as $index => $where) {
+            $conditions[] = "{$where['column']} {$where['operator']} ?";
+        }
+        $sql .= implode(' ', array_map(fn($w, $i) => ($i > 0 ? $this->wheres[$i]['type'] . ' ' : '') . $w, $conditions, array_keys($conditions)));
 
-    $stmt = $this->pdo->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(array_merge(array_values($data), array_column($this->wheres, 'value')));
 
-    $stmt->execute(array_merge(array_values($data), [$id]));
-
-    return $stmt->rowCount();
-}
+        $this->wheres = [];
+        return $stmt->rowCount();
+    }
 
     public function insertPerso(array $data, $spe = null)
     {

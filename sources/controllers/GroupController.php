@@ -10,6 +10,7 @@ class GroupController extends BaseController
     {
         $request = new CreateGroupRequest();
         Group::create($request->name);
+        $this->back();
     }
 
     public function get($id): void
@@ -20,6 +21,9 @@ class GroupController extends BaseController
 
     public function addUser($id): void
     {
+        if(User::currentUser()->getPermission($id) !== 3){
+            $this->withMessage("Vous n'avez pas les droits pour effectuer cette action.")->back();
+        }
         try {
             $group = Group::findById($id);
             $group->addUser($_POST['email']);
@@ -27,5 +31,33 @@ class GroupController extends BaseController
             $this->withMessage($e->getMessage())->back();
         }
         $this->withMessage("Utilisateur ajouté avec succès.")->back();
+    }
+
+    public function manageMember($id): void
+    {
+        if(User::currentUser()->getPermission($id) !== 3){
+            $this->withMessage("Vous n'avez pas les droits pour effectuer cette action.")->back();
+        }
+        $this->view("group/manageMember", ["group" => Group::findById($id)]);
+    }
+
+    public function deleteMember($id, $idUser): void
+    {
+        if(User::currentUser()->getPermission($id) !== 3){
+            $this->withMessage("Vous n'avez pas les droits pour effectuer cette action.")->back();
+        }
+        $group = Group::findById($id);
+        $group->deleteUser($idUser);
+        $this->back();
+    }
+
+    public function changePermission($id, $idUser): void
+    {
+        if(User::currentUser()->getPermission($id) !== 3 || $_POST['permission'] == 3){
+            $this->withMessage("Vous n'avez pas les droits pour effectuer cette action.")->back();
+        }
+        $group = Group::findById($id);
+        $group->changePermission($idUser, $_POST['permission']);
+        $this->back();
     }
 }

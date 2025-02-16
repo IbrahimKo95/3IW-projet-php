@@ -1,0 +1,29 @@
+@use "../partials/variables" as v;
+@use "../partials/mixins" as m;
+@use "../partials/functions" as f;
+
+@layer components {
+  .card-member {
+    @include m.flexbox($direction: row, $justify: space-between, $align: center);
+    padding: f.rem(10);
+    border-radius: f.rem(8);
+    background: var(--gray-light);
+
+    h3 {
+      font-size: f.rem(20);
+      color: var(--black);
+    }
+
+    &__actions {
+      @include m.flexbox($direction: row, $gap: f.rem(10));
+
+      select,
+      button {
+        height: f.rem(40);
+        padding: 0 f.rem(12);
+        font-size: f.rem(16);
+      }
+
+    }
+  }
+}

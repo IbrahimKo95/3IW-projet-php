@@ -22,9 +22,12 @@ $router->get("/register", RegisterController::class, "index");
 $router->post("/register", RegisterController::class, "post");
 
 $router->get("/group", GroupController::class, "index", ["Auth"]);
-$router->get("/group/{id}", GroupController::class, "get");
-$router->post("/group/create", GroupController::class, "store");
-$router->post("/group/{id}/addUser", GroupController::class, "addUser");
+$router->get("/group/{id}", GroupController::class, "get", ["Auth"]);
+$router->post("/group/create", GroupController::class, "store", ["Auth"]);
+$router->post("/group/{id}/addUser", GroupController::class, "addUser", ["Auth"]);
+$router->get("/group/{id}/manageMember", GroupController::class, "manageMember", ["Auth"]);
+$router->get("/group/{id}/deleteMember/{idUser}", GroupController::class, "deleteMember", ["Auth"]);
+$router->post("/group/{id}/changePermission/{idUser}", GroupController::class, "changePermission", ["Auth"]);
 
 // $router->get("/photo", PhotoController::class, "index", ["Auth"]);
 $router->get("/group/{id}/addPhotoForm", PhotoController::class, "index", ["Auth"]);

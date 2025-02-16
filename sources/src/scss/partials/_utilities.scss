@@ -26,12 +26,21 @@
 		.radius-#{$i} {
 			border-radius: $i * $increment;
 		}
+		.gap-#{$i} {
+			gap: $i * $increment;
+		}
 		@each $name, $value in $directions {
 			.m#{$name}-#{$i} {
 				margin-#{$value}: $i * $increment;
 			}
 			.p#{$name}-#{$i} {
 				padding-#{$value}: $i * $increment;
+			}
+			.px-#{$i} {
+				padding: 0 $i * $increment;
+			}
+			.py-#{$i} {
+				padding: $i * $increment 0;
 			}
 		}
 	}
@@ -44,5 +53,56 @@
 		.border-#{$name} {
 			border-color: var(--#{$name});
 		}
+		.text-#{$name} {
+			color: $value;
+		}
 	}
+
+	// flex utilities
+	.flex {
+		display: flex;
+	}
+	.flex-column {
+		flex-direction: column;
+	}
+	.flex-row {
+		flex-direction: row;
+	}
+	.justify-center {
+		justify-content: center;
+	}
+	.justify-between {
+		justify-content: space-between;
+	}
+	.justify-around {
+		justify-content: space-around;
+	}
+	.justify-evenly {
+		justify-content: space-evenly;
+	}
+	.align-center {
+		align-items: center;
+	}
+	.align-start {
+		align-items: flex-start;
+	}
+	.align-end {
+		align-items: flex-end;
+	}
+	.align-stretch {
+		align-items: stretch;
+	}
+	.align-baseline {
+		align-items: baseline;
+	}
+	.flex-wrap {
+		flex-wrap: wrap;
+	}
+	.flex-grow {
+		flex-grow: 1;
+	}
+	.flex-shrink {
+		flex-shrink: 1;
+	}
+
 }

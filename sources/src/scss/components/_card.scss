@@ -1,0 +1,21 @@
+@use "../partials/variables" as v;
+@use "../partials/mixins" as m;
+@use "../partials/functions" as f;
+
+@layer components {
+  .card {
+    background-color: var(--white);
+    border-radius: f.rem(10);
+    box-shadow: 0 0 f.rem(10) rgba(0, 0, 0, 0.1);
+    padding: f.rem(20) f.rem(40);
+    margin-bottom: f.rem(20);
+    &__titleBar {
+        @include m.flexbox($direction: row, $justify: space-between, $align: center);
+        margin-bottom: f.rem(20);
+        h2 {
+            font-size: f.rem(24);
+            color: var(--black);
+        }
+    }
+  }
+}

@@ -19,7 +19,7 @@ class Group
         DB::table('users_groups')->insert([
             'user_id' => $userId,
             'groups_id' => $groupId,
-            'permission' => 2
+            'permission' => 3
         ]);
         return true;
     }
@@ -44,6 +44,7 @@ class Group
         $res = DB::table('users_groups')
             ->join('users', 'users_groups.user_id', '=', 'users.id')
             ->where('users_groups.groups_id', '=', $this->id)
+            ->where('users_groups.permission', '>', 0)
             ->select('users.*')
             ->get();
         $users = [];
@@ -89,13 +90,42 @@ class Group
             ->where('user_id', '=', $user->id)
             ->where('groups_id', '=', $this->id)
             ->get();
-        if (count($res) > 0) {
+        if (count($res) > 0 && $res[0]['permission'] > 0) {
             throw new Exception("L'utilisateur est déjà dans le groupe");
+        }
+        if (count($res) > 0 && $res[0]['permission'] == 0) {
+            DB::table('users_groups')
+                ->where('user_id', '=', $user->id)
+                ->where('groups_id', '=', $this->id)
+                ->update([
+                    'permission' => 2
+                ]);
+            return;
         }
         DB::table('users_groups')->insert([
             'user_id' => $user->id,
             'groups_id' => $this->id,
-            'permission' => 1
+            'permission' => 2
         ]);
+    }
+
+    public function deleteUser($idUser): void
+    {
+        DB::table('users_groups')
+            ->where('user_id', '=', $idUser)
+            ->where('groups_id', '=', $this->id)
+            ->update([
+                'permission' => 0
+            ]);
+    }
+
+    public function changePermission($idUser, $permission)
+    {
+        DB::table('users_groups')
+            ->where('user_id', '=', $idUser)
+            ->where('groups_id', '=', $this->id)
+            ->update([
+                'permission' => $permission
+            ]);
     }
 }

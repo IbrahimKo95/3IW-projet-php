@@ -98,8 +98,12 @@
                 <?php if (User::currentUser()->getPermission($group->id) > 1) : ?>
                     <a href="<?= $group->id ?>/addPhotoForm" id="uploadPhotoBtn" data-group-id="<?= $group->id ?>" class="button button--primary">Upload photos</a>
                 <?php endif; ?>
-                <button class="button button--outline">Manage Members</button>
-                <button class="button button--outline">Settings</button>
+                <?php if (User::currentUser()->getPermission($group->id) == 3) : ?>
+                    <a href="<?=$group->id?>/manageMember" class="button button--outline">Gérer les membres</a>
+                    <button class="button button--outline">Paramètres</button>
+                <?php elseif (User::currentUser()->getPermission($group->id) < 3) : ?>
+                    <button class="button button--outline">Quitter le groupe</button>
+                <?php endif; ?>
             </div>
         </div>
     </div>

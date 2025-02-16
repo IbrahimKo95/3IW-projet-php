@@ -1,15 +1,38 @@
 @use "../partials/variables" as v;
+@use "../partials/functions" as f;
+
 @layer components {
 	.container {
-		margin: 0 2rem;
+		width: 100%;
+		margin: 0 auto;
+		padding: 0 2rem;
+		max-width: 100%;
 
 		@each $name, $value in v.$breakpoints {
 			@media screen and (min-width: $value) {
-				@if ($name == "sm") {
-					margin: auto;
-				}
 				max-width: calc($value - 4rem);
+
+				@if ($name == "sm") {
+					padding: 0;
+				}
 			}
 		}
+	}
+
+	.container-2xl {
+		width: 100%;
+		margin: 0 auto;
+		padding: 0 2rem;
+
+		@media screen and (min-width: f.screen(md)) {
+			max-width: calc(640px - 4rem);
+			padding: 0;
+		}
+
+		@media screen and (min-width: 50rem) {
+			max-width: 50rem;
+		}
+
+
 	}
 }
