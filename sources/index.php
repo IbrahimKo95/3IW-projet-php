@@ -21,13 +21,16 @@ $router->post("/login", LoginController::class, "post");
 $router->get("/register", RegisterController::class, "index");
 $router->post("/register", RegisterController::class, "post");
 
-$router->get("/group", GroupController::class, "index", ["Auth"]);
 $router->get("/group/{id}", GroupController::class, "get", ["Auth"]);
 $router->post("/group/create", GroupController::class, "store", ["Auth"]);
 $router->post("/group/{id}/addUser", GroupController::class, "addUser", ["Auth"]);
 $router->get("/group/{id}/manageMember", GroupController::class, "manageMember", ["Auth"]);
 $router->get("/group/{id}/deleteMember/{idUser}", GroupController::class, "deleteMember", ["Auth"]);
 $router->post("/group/{id}/changePermission/{idUser}", GroupController::class, "changePermission", ["Auth"]);
+$router->get("/group/{id}/quitGroup", GroupController::class, "quitGroup", ["Auth"]);
+$router->get("/group/{id}/parameters", GroupController::class, "parameters", ["Auth"]);
+$router->post("/group/{id}/update", GroupController::class, "changeName", ["Auth"]);
+$router->get("/group/{id}/delete", GroupController::class, "deleteGroup", ["Auth"]);
 
 // $router->get("/photo", PhotoController::class, "index", ["Auth"]);
 $router->get("/group/{id}/addPhotoForm", PhotoController::class, "index", ["Auth"]);

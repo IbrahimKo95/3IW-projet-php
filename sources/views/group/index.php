@@ -100,9 +100,9 @@
                 <?php endif; ?>
                 <?php if (User::currentUser()->getPermission($group->id) == 3) : ?>
                     <a href="<?=$group->id?>/manageMember" class="button button--outline">Gérer les membres</a>
-                    <button class="button button--outline">Paramètres</button>
+                    <a href="<?=$group->id?>/parameters" class="button button--outline">Paramètres</a>
                 <?php elseif (User::currentUser()->getPermission($group->id) < 3) : ?>
-                    <button class="button button--outline">Quitter le groupe</button>
+                    <a href="<?=$group->id?>/quitGroup" class="button button--outline">Quitter le groupe</a>
                 <?php endif; ?>
             </div>
         </div>

@@ -3,7 +3,7 @@
 <div class="container container-2xl mt-15">
     <div class="flex flex-row align-center gap-5 mb-5">
         <a href="/group/<?=$group->id?>"><i class="fa-solid fa-arrow-left"></i></a>
-        <h1>Manage Members</h1>
+        <h1>Gestion des membres</h1>
     </div>
     <div class="card">
         <div class="card__titleBar">
@@ -12,7 +12,7 @@
                 <button data-modal-target="addMemberModal" class="button button--primary" id="openModal"><i class="fa-solid fa-plus"></i>Ajouter un membre</button>
             </div>
         </div>
-        <div class="px-5">
+        <div>
             <?php if (isset($flashMessage)) : ?>
                 <p class="text-red"><?= $flashMessage ?></p>
             <?php endif; ?>

@@ -60,4 +60,38 @@ class GroupController extends BaseController
         $group->changePermission($idUser, $_POST['permission']);
         $this->back();
     }
+
+    public function quitGroup($id): void
+    {
+        $group = Group::findById($id);
+        if(User::currentUser()->getPermission($id) == 3){
+            $this->withMessage("Vous ne pouvez pas quitter un groupe dont vous êtes le créateur.")->back();
+        }
+        $group->deleteUser(User::currentUser()->id);
+        $this->redirect("/");
+    }
+
+    public function parameters($id): void
+    {
+        $this->view("group/parameters", ["group" => Group::findById($id)]);
+    }
+
+    public function deleteGroup($id): void
+    {
+        if(User::currentUser()->getPermission($id) !== 3){
+            $this->withMessage("Vous n'avez pas les droits pour effectuer cette action.")->back();
+        }
+        Group::delete($id);
+        $this->redirect("/");
+    }
+
+    public function changeName($id): void
+    {
+        if(User::currentUser()->getPermission($id) !== 3){
+            $this->withMessage("Vous n'avez pas les droits pour effectuer cette action.")->back();
+        }
+        $group = Group::findById($id);
+        $group->changeName($_POST['name']);
+        $this->back();
+    }
 }

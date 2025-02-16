@@ -128,4 +128,20 @@ class Group
                 'permission' => $permission
             ]);
     }
+
+    public static function delete($id): void
+    {
+        DB::table('groups')
+            ->where('id', '=', $id)
+            ->delete();
+    }
+
+    public function changeName($name): void
+    {
+        DB::table('groups')
+            ->where('id', '=', $this->id)
+            ->update([
+                'name' => $name
+            ]);
+    }
 }
