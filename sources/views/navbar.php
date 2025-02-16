@@ -1,6 +1,7 @@
 <nav class="navbar">
     <div class="container">
         <a href="#" class="navbar__title">ESGI-Photo</a>
+        <?php if (User::currentUser() !== null) : ?>
         <ul>
             <li>
                 <a id="darkModeToggle" href="#"><i class="fa-solid fa-sun"></i></a>
@@ -12,6 +13,7 @@
                 <a href="/logout" class="text-red">Logout</a>
             </li>
         </ul>
+        <?php endif;?>
         <button class="navbar__button">
             <svg
                     width="18"

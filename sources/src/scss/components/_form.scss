@@ -1,0 +1,23 @@
+@use "../partials/variables" as v;
+@use "../partials/mixins" as m;
+@use "../partials/functions" as f;
+
+@layer components {
+  .form {
+    //background-color: #0d6efd;
+    @include m.flexbox($direction: column, $align: center);
+    &__group {
+      margin-bottom: f.rem(16);
+      width: f.rem(560);
+      @include m.flexbox($direction: column, $gap: f.rem(8));
+      label {
+        color: var(--neutral-700);
+        font-size: f.rem(16);
+        font-weight: bold;
+      }
+    }
+    button {
+      width: f.rem(560)
+    }
+  }
+}

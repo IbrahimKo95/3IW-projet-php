@@ -8,6 +8,7 @@
     border-radius: f.rem(10);
     box-shadow: 0 0 f.rem(10) rgba(0, 0, 0, 0.1);
     padding: f.rem(20) f.rem(40);
+    padding-bottom: f.rem(30);
     margin-bottom: f.rem(20);
     &__titleBar {
         @include m.flexbox($direction: row, $justify: space-between, $align: center);

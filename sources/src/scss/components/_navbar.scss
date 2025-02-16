@@ -2,7 +2,8 @@
 @use "../partials/functions" as f;
 @layer components {
 	.navbar {
-		background-color: var(--neutral-50);
+		background-color: var(--white);
+		box-shadow: 0 f.rem(2) f.rem(4) rgba(0, 0, 0, 0.1);
 		color: var(--neutral-700);
 		padding: f.rem(35);
 		.container {

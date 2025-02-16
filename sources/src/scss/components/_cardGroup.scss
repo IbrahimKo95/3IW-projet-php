@@ -3,6 +3,7 @@
 @use "../partials/functions" as f;
 @layer components {
   .card-group {
+    background-color: var(--white);
     box-shadow: 0 0 f.rem(10) rgba(0, 0, 0, 0.1);
     border-radius: f.rem(10);
     padding: f.rem(16) f.rem(24);
