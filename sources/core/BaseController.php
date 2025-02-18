@@ -32,9 +32,13 @@ class BaseController
         exit;
     }
 
-    public function withMessage(string $message)
+    public function withMessage(string $message, $keepOpen = false)
     {
         $_SESSION['flash_message'] = $message;
+        if ($keepOpen == true) {
+            $_SESSION['open_modal'] = true;
+            $_SESSION['modal_message'] = $message;
+        }
         return $this;
     }
 

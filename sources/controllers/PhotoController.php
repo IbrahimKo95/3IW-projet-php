@@ -21,22 +21,25 @@ class PhotoController extends BaseController
 
         $user = User::currentUser();
         if (!$allSet) {
-            $this->withMessage("Remplissez tout les champs !")->back((array) $request);
+            $this->withMessage("Remplissez tout les champs !", true)->back((array) $request);
         }
 
         $formats = ["image/jpeg", "image/png", "image/gif"];
         if (!in_array($request->photoType, $formats)) {
-            $this->withMessage("Format non autorisé")->back((array) $request);
+            $this->withMessage("Format non autorisé", true)->back((array) $request);
         }
 
         if ($request->photoSize > 2 * 1024 * 1024) { // 2 Mo
-            $this->withMessage("Fichier trop grand (2mo max)")->back((array) $request);
+            $this->withMessage("Fichier trop grand (2mo max)", true)->back((array) $request);
         }
 
         $data = ['user_id' => $user->id, 'group_id' => $id, 'photos' => $request->photo, 'label' => $request->label];
         DB::table('posted_photos')->insertPerso($data, [':user_id' => PDO::PARAM_INT, ':group_id' => PDO::PARAM_INT, ':photos' => PDO::PARAM_LOB]);
 
-        $this->redirect('/group/'.$id);
+        unset($_SESSION['open_modal']);
+        unset($_SESSION['modal_message']);
+
+        $this->back();
     }
 
     public function deletePhoto($id): void
@@ -58,7 +61,9 @@ class PhotoController extends BaseController
 
         $publicToken = ($visibility === 'public') ? bin2hex(random_bytes(16)) : null;
 
-        DB::table('posted_photos')->update(['visibility' => $visibility, 'token' => $publicToken], $photoId);
+        DB::table('posted_photos')
+        ->where('id', '=', $photoId)
+        ->update(['visibility' => $visibility, 'token' => $publicToken]);
 
         $this->redirect('/group/'.$id);
     }

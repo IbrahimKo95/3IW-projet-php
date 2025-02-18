@@ -35,8 +35,8 @@
                 </button>
             </form>
         </div>
-        <div class="modal__footer">
+        <!-- <div class="modal__footer">
             <button class="select select--danger" id="cancelModalBtn">Annuler</button>
-        </div>
+        </div> -->
     </div>
 </div>

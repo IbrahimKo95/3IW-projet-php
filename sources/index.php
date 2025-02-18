@@ -34,9 +34,9 @@ $router->get("/group/{id}/delete", GroupController::class, "deleteGroup", ["Auth
 
 // $router->get("/photo", PhotoController::class, "index", ["Auth"]);
 $router->get("/group/{id}/addPhotoForm", PhotoController::class, "index", ["Auth"]);
-$router->post("/group/{id}/addPhoto", PhotoController::class, "addPhoto");
-$router->post("/group/{id}/deletePhoto", PhotoController::class, "deletePhoto");
-$router->post("/group/{id}/changeVisibility", PhotoController::class, "changeVisibility");
+$router->post("/group/{id}/addPhoto", PhotoController::class, "addPhoto", ["Auth"]);
+$router->post("/group/{id}/deletePhoto", PhotoController::class, "deletePhoto", ["Auth"]);
+$router->post("/group/{id}/changeVisibility", PhotoController::class, "changeVisibility", ["Auth"]);
 
 $router->get("/photo/{token}", PhotoController::class, "get");
 

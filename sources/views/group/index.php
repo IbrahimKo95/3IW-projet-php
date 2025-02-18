@@ -1,64 +1,3 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <title>Groups</title>
-</head> -->
-
-<!-- <body>
-    <p><?= $group->name ?></p>
-    <?php if (User::currentUser()->getPermission($group->id) == 2) : ?>
-        <form method="POST" action="<?= $group->id ?>/addUser">
-            <h2>Add user to group</h2>
-            <?php if (isset($flashMessage)) : ?>
-                <p><?= $flashMessage ?></p>
-            <?php endif; ?>
-            <input type="email" name="email">
-            <input type="submit">
-        </form>
-    <?php endif; ?>
-    <ul>
-        <?php foreach ($group->users() as $user) : ?>
-            <li><?= $user->fullName() . ' (' . $user->email . ') : ' . $user->getPermission($group->id) ?></li>
-        <?php endforeach; ?>
-    </ul>
-
-    <?php if (User::currentUser()->getPermission($group->id) > 1) : ?>
-        <a href="<?= $group->id ?>/addPhotoForm">Nouvelle photo</a>
-    <?php endif; ?>
-    <ul>
-        <?php foreach ($photos as $photo):
-            $imageData = base64_encode($photo->photo ?? ''); ?>
-            <li>
-                <?php if ($photo->visibility === 'public'): ?>
-                    <a href="/photo/<?= $photo->token ?>">
-                    <?php endif ?>
-                    <?php if (isset($photo->photo)): ?>
-                        <img src="<?= htmlspecialchars("data:image/jpeg;base64,{$imageData}"); ?>" alt="<?= htmlspecialchars($photo->label); ?>" width="200">
-                    <?php endif ?>
-                    <p><?= htmlspecialchars($photo->label); ?></p>
-                    <?php if ($photo->visibility === 'public'): ?>
-                    </a>
-                <?php endif ?>
-            </li>
-            <?php if (User::currentUser()->getPermission($group->id) == 3 || User::currentUser()->isMyPhoto($photo->id)) : ?>
-                <form action="<?= $group->id ?>/deletePhoto" method="POST">
-                    <input type="hidden" name="photo_id" value="<?= $photo->id; ?>">
-                    <button type="submit" onclick="return confirm('Voulez-vous vraiment supprimer cette photo ?');">Supprimer</button>
-                </form>
-                <form id="visibilitySelect-<?= $photo->id ?>" method="POST" action="<?= $group->id ?>/changeVisibility" enctype="multipart/form-data">
-                    <label>Visibilité :</label>
-                    <select name="visibility" id="visibility" onchange="document.getElementById('visibilitySelect-<?= $photo->id ?>').submit();">
-                        <option value="group" <?php if ($photo->visibility == 'group') : ?> selected <?php endif ?>>Groupe uniquement</option>
-                        <option value="public" <?php if ($photo->visibility == 'public') : ?> selected <?php endif ?>>Public (lien unique)</option>
-                    </select>
-                    <input type="hidden" name="photo_id" value="<?= $photo->id; ?>">
-                </form>
-            <?php endif; ?>
-        <?php endforeach; ?>
-    </ul>
-</body> -->
 
 <body class="mb-8">
     <nav class="navbar">
@@ -91,30 +30,39 @@
             </button>
         </div>
     </nav>
+    <div class="modal <?= isset($_SESSION['open_modal']) && $_SESSION['open_modal'] ? 'modal--visible' : '' ?>" id="addPhotoModal">
+        <?php unset($_SESSION['open_modal']); ?>
+        <div class="modal__content">
+            <button class="modal__close-btn" id="closeModalBtn">&times;</button>
+            <h2 class="modal__title">Ajouter une photo</h2>
+            <div class="modal__body" id="modalFormContent">
+                <?php if (!empty($_SESSION['modal_message'])) : ?>
+                    <p style="color: red"><?= $_SESSION['modal_message']; ?></p>
+                    <?php unset($_SESSION['modal_message']); ?>
+                <?php endif; ?>
+                <form class="modal__body__form" method="POST" action="/group/<?= $group->id ?>/addPhoto" enctype="multipart/form-data">
+                    <input required placeholder="Image" type="file" name="file" id="file">
+                    <input required placeholder="Label" type="text" name="label" id="label">
+                    <button class="button button--outline">
+                        Ajouter
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
     <div class="container mt-15">
         <div class="title-bar">
             <h1><?= $group->name ?></h1>
             <div class="title-bar__buttons">
                 <?php if (User::currentUser()->getPermission($group->id) > 1) : ?>
-                    <a href="<?= $group->id ?>/addPhotoForm" id="uploadPhotoBtn" data-group-id="<?= $group->id ?>" class="button button--primary">Upload photos</a>
+                    <button data-modal-target="addPhotoModal" class="button button--primary">Upload photos</button>
                 <?php endif; ?>
                 <?php if (User::currentUser()->getPermission($group->id) == 3) : ?>
-                    <a href="<?=$group->id?>/manageMember" class="button button--outline">Gérer les membres</a>
-                    <a href="<?=$group->id?>/parameters" class="button button--outline">Paramètres</a>
+                    <a href="<?= $group->id ?>/manageMember" class="button button--outline">Gérer les membres</a>
+                    <a href="<?= $group->id ?>/parameters" class="button button--outline">Paramètres</a>
                 <?php elseif (User::currentUser()->getPermission($group->id) < 3) : ?>
-                    <a href="<?=$group->id?>/quitGroup" class="button button--outline">Quitter le groupe</a>
+                    <a href="<?= $group->id ?>/quitGroup" class="button button--outline">Quitter le groupe</a>
                 <?php endif; ?>
-            </div>
-        </div>
-    </div>
-    <div class="modal" id="photoUploadModal">
-        <div class="modal__content">
-            <button class="modal__close-btn" id="closeModalBtn">&times;</button>
-            <h2 class="modal__title">Ajouter une photo</h2>
-            <div class="modal__body" id="modalFormContent">
-            </div>
-            <div class="modal__footer">
-                <button class="select select--danger" id="cancelModalBtn">Annuler</button>
             </div>
         </div>
     </div>
