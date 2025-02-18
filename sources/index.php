@@ -41,6 +41,9 @@ $router->post("/group/{id}/changeVisibility", PhotoController::class, "changeVis
 $router->get("/photo/{token}", PhotoController::class, "get");
 
 
+$router->get("/design-guide", HomeController::class, "designGuide");
+
+
 // $router->get("/photo/{id}", GroupController::class, "get");
 // $router->post("/group/create", GroupController::class, "store");
 // $router->post("/group/{id}/addUser", GroupController::class, "addUser");
