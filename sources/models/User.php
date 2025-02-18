@@ -60,6 +60,7 @@ class User
         $res = DB::table('users_groups')
             ->join('groups', 'users_groups.groups_id', '=', 'groups.id')
             ->where('users_groups.user_id', '=', $this->id)
+            ->where('users_groups.permission', '>', 0)
             ->select('groups.*')
             ->get();
         $groups = [];

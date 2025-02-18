@@ -2,9 +2,9 @@
 @use "../partials/functions" as f;
 @layer components {
 	.navbar {
-		background-color: var(--white);
+		background-color: var(--nav-bg-color);
 		box-shadow: 0 f.rem(2) f.rem(4) rgba(0, 0, 0, 0.1);
-		color: var(--neutral-700);
+		color: var(--secondary-text-color);
 		padding: f.rem(35);
 		.container {
 			@include m.flexbox($direction: column, $align: flex-start);
@@ -37,6 +37,7 @@
 			}
 		}
 		&__title {
+			color: var(--default-text-color);
 			font-size: f.rem(20);
 			font-weight: bold;
 		}

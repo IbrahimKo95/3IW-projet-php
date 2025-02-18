@@ -3,7 +3,7 @@
 @use "../partials/functions" as f;
 @layer components {
   .card-group {
-    background-color: var(--white);
+    background-color: var(--nav-bg-color);
     box-shadow: 0 0 f.rem(10) rgba(0, 0, 0, 0.1);
     border-radius: f.rem(10);
     padding: f.rem(16) f.rem(24);
@@ -20,10 +20,9 @@
     }
     &__title {
       font-size: f.rem(24);
-      color: var(--black);
     }
     &__content {
-      color: var(--neutral-700);
+      color: var(--secondary-text-color);
       p {
         @include m.flexbox($direction: row, $gap: f.rem(8));
       }

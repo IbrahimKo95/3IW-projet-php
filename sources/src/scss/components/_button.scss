@@ -40,8 +40,8 @@
 		}
 		&--outline {
 			background-color: transparent;
-			color: var(--neutral-700);
-			border: 1px solid var(--neutral-700);
+			color: var(--secondary-text-color);
+			border: 1px solid var(--secondary-text-color);
 			&:hover {
 				background-color: var(--primary-700);
 				border-color: var(--primary-700);

@@ -1,16 +1,16 @@
 <nav class="navbar">
     <div class="container">
-        <a href="#" class="navbar__title">ESGI-Photo</a>
+        <a href="/" class="navbar__title">ESGI-Photo</a>
         <?php if (User::currentUser() !== null) : ?>
         <ul>
             <li>
-                <a id="darkModeToggle" href="#"><i class="fa-solid fa-sun"></i></a>
+                <a id="toggle-darkmode"><i class="fa-solid fa-sun"></i></a>
             </li>
             <li>
                 <a href="#">Profile</a>
             </li>
             <li>
-                <a href="/logout" class="text-red">Logout</a>
+                <a href="/logout" class="text-red">Déconnexion</a>
             </li>
         </ul>
         <?php endif;?>
