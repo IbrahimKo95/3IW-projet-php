@@ -68,3 +68,52 @@
             <input id="password" type="password" name="password">
     </form>
 </div>
+
+<div class="container mb-5">
+    <h3>Select</h3>
+    <select class="select select--primary">
+        <option value="option1">Option 1</option>
+        <option value="option2">Option 2</option>
+    </select>
+</div>
+
+<div class="container mt-15 card-photo__container">
+    <h3>CardPhoto</h3>
+    <div class="card-photo">
+        <img src="../src/images/photoTest.jpg" alt="Photo test" />
+        <div class="card-photo__banner">
+            <p class="card-photo__label">Photo test</p>
+            <div class="card-photo__actions">
+                <button class="fa-solid fa-trash button--wb" type="submit" onclick="return confirm('Voulez-vous vraiment supprimer cette photo ?');"></button>
+                <div class="card-photo__visibility">
+                    <select class="select--primary select" name="visibility" id="visibility" onchange="document.getElementById('visibilitySelect-<?= $photo->id ?>').submit();">
+                        <option value="group" selected>Groupe uniquement</option>
+                        <option value="public">Public (lien unique)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mb-10">
+    <h3>Modal</h3>
+    <button data-modal-target="openModal" class="button button--primary">Open modal</button>
+
+    <div class="modal" id="openModal">
+        <div class="modal__content">
+            <button class="modal__close-btn" id="closeModalBtn">&times;</button>
+            <h2 class="modal__title">Modal d'exemple</h2>
+            <div class="modal__body" id="modalFormContent">
+                <p style="color: red">Message d'erreur exemple</p>
+                <form class="modal__body__form" method="POST" action="#">
+                    <input required type="file">
+                    <input required placeholder="Text" type="text">
+                    <button class="button button--outline">
+                        Ajouter
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
